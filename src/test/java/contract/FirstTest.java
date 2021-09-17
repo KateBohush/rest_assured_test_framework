@@ -3,10 +3,10 @@ package contract;
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
-import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.lessThan;
 
-public class ContractTest {
+public class FirstTest {
 
     @Test
     public void restGet() {
@@ -15,11 +15,14 @@ public class ContractTest {
                 .contentType(ContentType.JSON)
                 .basePath("/api/users")
                 .param("page", 2)
+                .log().body()
                 .when()
                 .get()
                 .then()
+                .statusCode(200)
+                .time(lessThan(5000L))
                 .log()
-                .body()
-                .body(matchesJsonSchemaInClasspath("usersResponseSchema.json"));
+                .body();
+
     }
 }
