@@ -1,13 +1,18 @@
 package contract;
 
+import api.client.GetRequests;
 import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.testng.annotations.Test;
 
-import static api.spec.CommonRequestSpecification.getCommonSpec;
+import java.util.HashMap;
+
+import static api.spec.CommonRequestSpecification.getSpecWithParam;
 import static api.spec.CommonResponseSpecification.bodyEqualSpec;
 import static api.spec.CommonResponseSpecification.statusCodeSpec;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.lessThan;
+import static validators.ResponseValidator.verifyResponseFieldEqualTo;
 
 public class FirstTest {
 
@@ -48,17 +53,25 @@ public class FirstTest {
 
     @Test
     public void restGetSingle() {
-        given().spec(getCommonSpec("/api/users/{id}"))
-                .pathParam("id", 2)
+        given().spec(getSpecWithParam("/api/users/{id}", new HashMap<String, String>() {{
+            put("id", "2");
+        }}))
                 .log().uri()
                 .when()
                 .get()
                 .then()
                 .spec(statusCodeSpec(200))
-                .spec(bodyEqualSpec("data.first_name","Janet"))
+                .spec(bodyEqualSpec("data.first_name", "Janet"))
                 .log()
                 .body();
 
+    }
+
+    @Test
+    public void restGetSingleRefactored() {
+        HashMap pathParam = new HashMap<String, String>() {{ put("id", "2"); }};
+        ValidatableResponse resp = new GetRequests().getRequest("/api/users/{id}", pathParam);
+        verifyResponseFieldEqualTo(resp, "data.first_name", "Janet");
     }
 
     @Test
