@@ -25,4 +25,21 @@ public class FirstTest {
                 .body();
 
     }
+
+    @Test
+    public void restPost() {
+        given()
+                .baseUri("https://reqres.in")
+                .contentType(ContentType.JSON)
+                .basePath("/api/users")
+                .log().body()
+                .when()
+                .body("{\"name\": \"morpheus\",\"job\": \"leader\"}")
+                .post()
+                .then()
+                .statusCode(201)
+                .log()
+                .body();
+
+    }
 }
