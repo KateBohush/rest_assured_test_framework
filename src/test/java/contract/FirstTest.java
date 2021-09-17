@@ -4,6 +4,8 @@ import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
 import static api_client.CommonRequestSpecification.getCommonSpec;
+import static api_client.CommonResponseSpecification.bodyEqualSpec;
+import static api_client.CommonResponseSpecification.statusCodeSpec;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.lessThan;
 
@@ -48,13 +50,12 @@ public class FirstTest {
     public void restGetSingle() {
         given().spec(getCommonSpec("/api/users/{id}"))
                 .pathParam("id", 2)
-                .log().body()
                 .log().uri()
                 .when()
                 .get()
                 .then()
-                .statusCode(200)
-                .time(lessThan(5000L))
+                .spec(statusCodeSpec(200))
+                .spec(bodyEqualSpec("data.first_name","Janet"))
                 .log()
                 .body();
 
