@@ -15,4 +15,12 @@ public class PostRequest {
                 .post()
                 .then();
     }
+    public ValidatableResponse postRequestWithObject(String resourcePath, Object body) {
+        return given().spec(getCommonSpec(resourcePath))
+                .when()
+                .body(body)
+                .log().body()
+                .post()
+                .then();
+    }
 }

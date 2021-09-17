@@ -57,11 +57,9 @@ public class FirstTest {
 
     @Test
     public void restPostWithModel() {
-        User user = new User();
-        user.setName("Ostap");
-        user.setJob("Tester");
-        ValidatableResponse resp = new PostRequest().postRequest("/api/users", new Gson().toJson(user));
-        verifyStatusCode(resp, 201);
+        User user = User.builder().name("Kateryna").job("Tester").build();
+        ValidatableResponse resp = new PostRequest().postRequestWithObject("/api/users", user);
+        verifyResponseFieldEqualTo(resp, "name", "Kateryna");
     }
 
     @Test
