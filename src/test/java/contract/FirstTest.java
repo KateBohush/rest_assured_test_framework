@@ -1,8 +1,11 @@
 package contract;
 
 import api.client.GetRequests;
+import api.client.PostRequest;
+import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
+import models.User;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -13,6 +16,7 @@ import static api.spec.CommonResponseSpecification.statusCodeSpec;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.lessThan;
 import static validators.ResponseValidator.verifyResponseFieldEqualTo;
+import static validators.ResponseValidator.verifyStatusCode;
 
 public class FirstTest {
 
@@ -52,6 +56,15 @@ public class FirstTest {
     }
 
     @Test
+    public void restPostWithModel() {
+        User user = new User();
+        user.setName("Ostap");
+        user.setJob("Tester");
+        ValidatableResponse resp = new PostRequest().postRequest("/api/users", new Gson().toJson(user));
+        verifyStatusCode(resp, 201);
+    }
+
+    @Test
     public void restGetSingle() {
         given().spec(getSpecWithParam("/api/users/{id}", new HashMap<String, String>() {{
             put("id", "2");
@@ -69,7 +82,9 @@ public class FirstTest {
 
     @Test
     public void restGetSingleRefactored() {
-        HashMap pathParam = new HashMap<String, String>() {{ put("id", "2"); }};
+        HashMap pathParam = new HashMap<String, String>() {{
+            put("id", "2");
+        }};
         ValidatableResponse resp = new GetRequests().getRequest("/api/users/{id}", pathParam);
         verifyResponseFieldEqualTo(resp, "data.first_name", "Janet");
     }
