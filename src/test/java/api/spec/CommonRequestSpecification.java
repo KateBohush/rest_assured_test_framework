@@ -1,4 +1,4 @@
-package api_client;
+package api.spec;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
