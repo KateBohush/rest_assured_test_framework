@@ -3,6 +3,7 @@ package contract;
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
+import static api_client.CommonRequestSpecification.getCommonSpec;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.lessThan;
 
@@ -15,7 +16,7 @@ public class FirstTest {
                 .contentType(ContentType.JSON)
                 .basePath("/api/users")
                 .param("page", 2)
-                .log().body()
+                .log().uri()
                 .when()
                 .get()
                 .then()
@@ -45,10 +46,7 @@ public class FirstTest {
 
     @Test
     public void restGetSingle() {
-        given()
-                .baseUri("https://reqres.in")
-                .contentType(ContentType.JSON)
-                .basePath("/api/users/{id}")
+        given().spec(getCommonSpec("/api/users/{id}"))
                 .pathParam("id", 2)
                 .log().body()
                 .log().uri()
