@@ -18,13 +18,22 @@ public class CommonRequestSpecification {
         return spec;
     }
 
-    public static RequestSpecification getSpecWithParam(String path, Map<String, String> pathParam) {
+    public static RequestSpecification getSpecWithPathParam(String path, Map<String, String> pathParam) {
         RequestSpecification spec = new RequestSpecBuilder()
                 .setBaseUri(URI)
                 .setContentType(ContentType.JSON)
                 .setBasePath(path)
                 .build();
         pathParam.forEach((k, v) -> spec.pathParam(k, v));
+        return spec;
+    }
+    public static RequestSpecification getSpecWithQueryParam(String path, Map<String, String> pathParam) {
+        RequestSpecification spec = new RequestSpecBuilder()
+                .setBaseUri(URI)
+                .setContentType(ContentType.JSON)
+                .setBasePath(path)
+                .build();
+        pathParam.forEach((k, v) -> spec.queryParam(k, v));
         return spec;
     }
 

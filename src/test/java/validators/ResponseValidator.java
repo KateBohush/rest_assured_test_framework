@@ -5,6 +5,7 @@ import io.restassured.response.ValidatableResponse;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.jayway.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.Matchers.*;
 
 public class ResponseValidator {
@@ -23,5 +24,9 @@ public class ResponseValidator {
 
     public static void verifyStatusCode(ValidatableResponse resp, int expected) {
         resp.statusCode(expected).log().body();
+    }
+
+    public static void validateJsonSchema(ValidatableResponse resp, String pathToSchema) {
+        resp.body(matchesJsonSchemaInClasspath(pathToSchema));
     }
 }

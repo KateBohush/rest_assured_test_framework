@@ -2,7 +2,6 @@ package contract;
 
 import api.client.GetRequests;
 import api.client.PostRequest;
-import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import models.User;
@@ -10,13 +9,13 @@ import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
-import static api.spec.CommonRequestSpecification.getSpecWithParam;
+import static api.spec.CommonRequestSpecification.getSpecWithPathParam;
 import static api.spec.CommonResponseSpecification.bodyEqualSpec;
 import static api.spec.CommonResponseSpecification.statusCodeSpec;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.lessThan;
+import static validators.ResponseValidator.validateJsonSchema;
 import static validators.ResponseValidator.verifyResponseFieldEqualTo;
-import static validators.ResponseValidator.verifyStatusCode;
 
 public class FirstTest {
 
@@ -36,6 +35,15 @@ public class FirstTest {
                 .log()
                 .body();
 
+    }
+
+    @Test
+    public void contractTesting() {
+        HashMap queryParam = new HashMap<String, String>() {{
+            put("page", "2");
+        }};
+        ValidatableResponse resp = new GetRequests().getWithQueryParamRequest("/api/users", queryParam);
+        validateJsonSchema(resp, "usersResponseSchema.json");
     }
 
     @Test
@@ -64,7 +72,7 @@ public class FirstTest {
 
     @Test
     public void restGetSingle() {
-        given().spec(getSpecWithParam("/api/users/{id}", new HashMap<String, String>() {{
+        given().spec(getSpecWithPathParam("/api/users/{id}", new HashMap<String, String>() {{
             put("id", "2");
         }}))
                 .log().uri()
