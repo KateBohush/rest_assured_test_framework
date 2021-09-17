@@ -42,4 +42,20 @@ public class FirstTest {
                 .body();
 
     }
+    @Test
+    public void restDelete() {
+        given()
+                .baseUri("https://reqres.in")
+                .contentType(ContentType.JSON)
+//                PUT created user id here
+                .basePath("/api/users/268")
+                .log().body()
+                .when()
+                .delete()
+                .then()
+                .statusCode(204)
+                .log()
+                .body();
+
+    }
 }
