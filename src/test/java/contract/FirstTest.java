@@ -101,7 +101,7 @@ public class FirstTest {
                 .baseUri("https://reqres.in")
                 .contentType(ContentType.JSON)
 //                  PUT created user id here
-                .basePath("/api/users/{id}}")
+                .basePath("/api/users/{id}")
                 .pathParam("id", 98)
                 .log().body()
                 .when()
